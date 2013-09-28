@@ -1,0 +1,31 @@
+{
+  "name": "creep",
+  "version": "0.0.0",
+  "description": "Crawls metadata in files and directories",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:justinvdm/creep.git"
+  },
+  "keywords": [
+    "metadata",
+    "find",
+    "fs"
+  ],
+  "author": "justinvdm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/justinvdm/creep/issues"
+  },
+  "dependencies": {
+    "matter": "~0.2.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-mocha-test": "~0.7.0",
+    "grunt-contrib-jshint": "~0.6.4"
+  }
+}
