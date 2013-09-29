@@ -26,7 +26,9 @@ crawl.each.file = function(dirname, options, fn) {
       var results = [];
 
       while (++i < n) {
-        results.push(parse.file(filenames[i], options).then(fn));
+        results.push(parse
+          .file(filenames[i], options)
+          .then(fn));
       }
 
       return q.all(results);
