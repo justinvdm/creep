@@ -1,3 +1,5 @@
-# metack
+# creep
 
-Find and fetch files using metadata placed in files and directories.
+Crawls metadata in files and directories.
+
+*Not yet ready for release.*

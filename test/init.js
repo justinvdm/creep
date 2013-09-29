@@ -8,3 +8,7 @@ global.paths.base = path.resolve(__dirname, '..');
 paths.src = function(p) {
   return path.join(paths.base, 'src', p);
 };
+
+paths.fixtures = function(p) {
+  return path.join(paths.base, 'test', 'fixtures', p);
+};

@@ -21,7 +21,11 @@
     "url": "https://github.com/justinvdm/creep/issues"
   },
   "dependencies": {
-    "matter": "~0.2.0"
+    "matter": "~0.2.0",
+    "underscore": "~1.5.2",
+    "js-yaml": "~2.1.0",
+    "q": "~0.9.7",
+    "q-io": "~1.10.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
