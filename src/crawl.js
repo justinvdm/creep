@@ -23,10 +23,13 @@ crawl.each.file = function(dirname, options, fn) {
 
       var i = -1;
       var n = filenames.length;
+      var results = [];
 
       while (++i < n) {
-        parse.file(filenames[i], options).then(fn);
+        results.push(parse.file(filenames[i], options).then(fn));
       }
+
+      return q.all(results);
     });
 };
 
