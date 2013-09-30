@@ -174,12 +174,12 @@ describe("parsers", function() {
 
   describe(".dir", function() {
     it("should use the first dir metadata file it finds", function(done) {
-      var a = parsers.dir(paths.fixtures('a')).then(function(metadata) {
-        assert.deepEqual(metadata, {spam: 'ham'});
+      var a = parsers.dir(paths.fixtures('code/js/fib')).then(function(metadata) {
+        assert.deepEqual(metadata, {tags: ['fibonnaci']});
       });
 
-      var b = parsers.dir(paths.fixtures('b')).then(function(metadata) {
-        assert.deepEqual(metadata, {swan: 'lake'});
+      var b = parsers.dir(paths.fixtures('code/js')).then(function(metadata) {
+        assert.deepEqual(metadata, {lang: 'js'});
       });
 
       q.all([a, b]).done(function() { done(); });
@@ -195,16 +195,11 @@ describe("parsers", function() {
       });
 
       it("should parse and return a file's front matter metadata", function(done) {
-        matter(paths.fixtures('a/simple.md'))
+        matter(paths.fixtures('code/js/fib/memoize.js'))
           .then(function(metadata) {
             assert.deepEqual(metadata, {
-              foo: 'bar',
-              baz: 'qux',
-              racecar: [
-                'lerp',
-                'larp',
-                'lorem'
-              ]
+              name: 'fibonnaci sequence using memoization',
+              tags: ['memoize']
             });
           })
           .done(function() { done(); });
