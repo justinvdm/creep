@@ -5,6 +5,12 @@ var utils = require('./utils');
 var parse = require('./parsers');
 var crawl = exports;
 
+crawl.invoke = function(filename, options, fn) {
+  return q
+    .all([filename, parse.file(filename, options)])
+    .spread(fn);
+};
+
 crawl.each = function(dirname, options, fn) {
   return q
     .all([
@@ -26,9 +32,7 @@ crawl.each.file = function(dirname, options, fn) {
       var results = [];
 
       while (++i < n) {
-        results.push(parse
-          .file(filenames[i], options)
-          .then(fn));
+        results.push(crawl.invoke(filenames[i], options, fn));
       }
 
       return q.all(results);
