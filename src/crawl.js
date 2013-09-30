@@ -6,12 +6,22 @@ var parse = require('./parsers');
 var crawl = exports;
 
 crawl.invoke = function(filename, options, fn) {
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
+
   return q
     .all([filename, parse.file(filename, options)])
     .spread(fn);
 };
 
 crawl.each = function(dirname, options, fn) {
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
+
   return q
     .all([
       crawl.each.file(dirname, options, fn),
@@ -20,6 +30,11 @@ crawl.each = function(dirname, options, fn) {
 };
 
 crawl.each.file = function(dirname, options, fn) {
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
+
   return q
     .all([
       utils.listFiles(dirname),
@@ -40,6 +55,11 @@ crawl.each.file = function(dirname, options, fn) {
 };
 
 crawl.each.dir = function(dirname, options, fn) {
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
+
   return utils.listDirs(dirname).then(function(dirnames) {
     var i = -1;
     var n = dirnames.length;
@@ -57,7 +77,7 @@ crawl.map = function(dirname, options, fn) {
   var results = [];
 
   crawl
-    .each(dirname, function(filename, metadata) {
+    .each(dirname, options, function(filename, metadata) {
       results.push(fn(filename, metadata));
     })
     .then(function() { return q.all(results); });
@@ -65,10 +85,9 @@ crawl.map = function(dirname, options, fn) {
 
 crawl.filter = function(dirname, options, fn) {
   var results = [];
-  var d = q.defer();
 
   return crawl
-    .each(dirname, function(filename, metadata) {
+    .each(dirname, options, function(filename, metadata) {
       if (fn(filename, metadata)) {
         results.push({
           filename: filename,
@@ -83,7 +102,7 @@ crawl.filter.filenames = function(dirname, options, fn) {
   var results = [];
 
   return crawl
-    .each(dirname, function(filename, metadata) {
+    .each(dirname, options, function(filename, metadata) {
       if (fn(filename, metadata)) {
         results.push(filename);
       }
@@ -95,7 +114,7 @@ crawl.filter.metadata = function(dirname, options, fn) {
   var results = [];
 
   return crawl
-    .each(dirname, function(filename, metadata) {
+    .each(dirname, options, function(filename, metadata) {
       if (fn(filename, metadata)) {
         results.push(metadata);
       }
