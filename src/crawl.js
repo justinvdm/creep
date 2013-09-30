@@ -22,11 +22,16 @@ crawl.each = function(dirname, options, fn) {
     options = {};
   }
 
-  return q
-    .all([
-      crawl.each.file(dirname, options, fn),
-      crawl.each.dir(dirname, options, fn)])
-    .then();
+  return parse.dir(dirname, options).then(function(metadata) {
+    options = _(options).clone();
+    options.defaults = metadata;
+
+    return q
+      .all([
+        crawl.each.file(dirname, options, fn),
+        crawl.each.dir(dirname, options, fn)])
+      .then();
+  });
 };
 
 crawl.each.file = function(dirname, options, fn) {
@@ -35,23 +40,17 @@ crawl.each.file = function(dirname, options, fn) {
     options = {};
   }
 
-  return q
-    .all([
-      utils.listFiles(dirname),
-      parse.dir(dirname, options)])
-    .spread(function(filenames, defaults) {
-      options.defaults = defaults;
+  return utils.listFiles(dirname).then(function(filenames) {
+    var i = -1;
+    var n = filenames.length;
+    var results = [];
 
-      var i = -1;
-      var n = filenames.length;
-      var results = [];
+    while (++i < n) {
+      results.push(crawl.invoke(filenames[i], options, fn));
+    }
 
-      while (++i < n) {
-        results.push(crawl.invoke(filenames[i], options, fn));
-      }
-
-      return q.all(results);
-    });
+    return q.all(results);
+  });
 };
 
 crawl.each.dir = function(dirname, options, fn) {
