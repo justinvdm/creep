@@ -83,6 +83,21 @@ crawl.map = function(dirname, options, fn) {
     .then(function() { return q.all(results); });
 };
 
+crawl.all = function(dirname, options, fn) {
+  crawl.map(dirname, options, function(filename, metadata) {
+    return {
+      filename: filename,
+      metadata: metadata
+    };
+  });
+};
+
+crawl.all.metadata = function(dirname, options, fn) {
+  crawl.map(dirname, options, function(filename, metadata) {
+    return metadata;
+  });
+};
+
 crawl.filter = function(dirname, options, fn) {
   var results = [];
 
