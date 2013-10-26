@@ -1,7 +1,12 @@
+require('js-yaml');
+
+var nfs = require('fs');
 var path = require('path');
 var q = require('q');
 var _ = require('underscore');
+var deepExtend = require('tea-merge');
 
+var config = require('../config');
 var utils = require('../utils');
 var parsers = exports;
 
@@ -102,21 +107,37 @@ parsers.file = function(filename, options) {
   var parser = parsers.get.byFilename(filename) || parsers.nop;
 
   return q(parser(filename, options)).then(function(metadata) {
-    return _(metadata || {}).defaults(options.defaults || {});
+    return deepExtend({}, options.defaults || {}, metadata || {});
   });
 };
 
 parsers.dir = function(dirname, options) {
   options = options || {};
+  var metadata = parsers.dir.manifest(dirname);
+  return q(deepExtend({}, options.defaults || {}, metadata));
+};
 
-  var metadata = utils.requireFirst([
-    path.join(dirname, '.creep.yml'),
-    path.join(dirname, '.creep.yaml'),
-    path.join(dirname, 'creep.yml'),
-    path.join(dirname, 'creep.yaml'),
-    path.join(dirname, '.creep.json'),
-    path.join(dirname, 'creep.json'),
-  ]) || {};
+parsers.dir.manifest = function(dirname) {
+  var filenames = config.manifests.map(function(m) {
+    return path.join(dirname, m);
+  });
 
-  return q(_(metadata).defaults(options.defaults || {}));
+  var i = -1;
+  var n = filenames.length;
+  var filename;
+  var data;
+
+  while (++i < n) {
+    filename = filenames[i];
+
+    if (nfs.existsSync(filename)) {
+      // ensure we don't use the cache
+      delete require.cache[filename];
+
+      data = require(filename);
+      if (typeof data != 'undefined') { return data; }
+    }
+  }
+
+  return {};
 };

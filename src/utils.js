@@ -1,26 +1,8 @@
-require('js-yaml');
-
 var path = require('path');
-var nfs = require('fs');
-
 var fs = require('q-io/fs');
 var q = require('q');
+
 var utils = exports;
-
-utils.requireFirst = function(filenames) {
-  var i = -1;
-  var n = filenames.length;
-
-  while (++i < n) {
-    var filename = filenames[i];
-    var data;
-
-    if (nfs.existsSync(filename)) {
-      data = require(filename);
-      if (typeof data != 'undefined') { return data; }
-    }
-  }
-};
 
 utils.basePaths = function(base, children) {
   var i = -1;

@@ -4,7 +4,13 @@ describe("parsers", function() {
   var parsers = require(paths.src('./parsers'));
 
   function foo() {
-    return {lerp: 'larp'};
+    return {
+      lerp: 'larp',
+      tags: [
+        'vowels',
+        'space',
+        'time']
+    };
   }
 
   describe(".register", function() {
@@ -156,33 +162,104 @@ describe("parsers", function() {
     });
 
     it("proxy to the parser associated to the given filename", function(done) {
-      parsers.file('luke.foo').then(function(metadata) {
-        assert.deepEqual(metadata, {lerp: 'larp'});
-        done();
-      });
+      parsers.file('luke.foo')
+        .then(function(metadata) {
+          assert.deepEqual(
+            metadata,
+            {
+              lerp: 'larp',
+              tags: [
+                'vowels',
+                'space',
+                'time']
+            });
+        })
+        .then(done, done);
+    });
+
+    it("should deep merge defaults", function(done) {
+      parsers
+        .file(paths.fixtures('luke.foo'), {
+          defaults: {
+            foo: 'bar',
+            lerp: 'lorem',
+            tags: ['stuff']
+          }
+        })
+        .then(function(metadata) {
+          assert.deepEqual(
+            metadata,
+            {
+              foo: 'bar',
+              lerp: 'larp',
+              tags: [
+                'stuff',
+                'vowels',
+                'space',
+                'time']
+            });
+        })
+        .then(done, done);
     });
 
     describe("if no parser is found for an extension", function() {
       it("should fall back to a no op parser ", function(done) {
-        parsers.file('luke.spam').then(function(metadata) {
-          assert.deepEqual(metadata, {});
-          done();
-        });
+        parsers.file('luke.spam')
+          .then(function(metadata) {
+            assert.deepEqual(metadata, {});
+          })
+          .then(done, done);
       });
     });
   });
 
   describe(".dir", function() {
-    it("should use the first dir metadata file it finds", function(done) {
-      var a = parsers.dir(paths.fixtures('code/js/fib')).then(function(metadata) {
+    it("should parse the dir's metadata from a manifest", function(done) {
+      parsers.dir(paths.fixtures('code/js/fib')).then(function(metadata) {
         assert.deepEqual(metadata, {tags: ['fibonnaci']});
-      });
+      })
+      .then(done, done);
+    });
 
-      var b = parsers.dir(paths.fixtures('code/js')).then(function(metadata) {
-        assert.deepEqual(metadata, {lang: 'js'});
-      });
+    it("should deep merge defaults", function(done) {
+      parsers
+        .dir(paths.fixtures('code/js/fib'), {
+          defaults: {
+            foo: 'bar',
+            tags: ['stuff']
+          }
+        })
+        .then(function(metadata) {
+          assert.deepEqual(
+            metadata,
+            {
+              foo: 'bar',
+              tags: [
+                'stuff',
+                'fibonnaci']
+            });
+        })
+        .then(done, done);
+    });
 
-      q.all([a, b]).done(function() { done(); });
+    describe(".manifest", function() {
+      it("should require the first manifest it finds in the dir", function() {
+        assert.deepEqual(
+          parsers.dir.manifest(paths.fixtures('code')),
+          {type: 'code'});
+
+        assert.deepEqual(
+          parsers.dir.manifest(paths.fixtures('code/js')),
+          {lang: 'js'});
+
+        assert.deepEqual(
+          parsers.dir.manifest(paths.fixtures('code/js/fib')),
+          {tags: ['fibonnaci']});
+
+        assert.deepEqual(
+          parsers.dir.manifest(paths.fixtures('i/do/not/exist')),
+          {});
+      });
     });
   });
 
@@ -202,7 +279,7 @@ describe("parsers", function() {
               tags: ['memoize']
             });
           })
-          .done(function() { done(); });
+          .then(done, done);
       });
 
       describe("if no matter parser is found for the requested format", function() {
@@ -211,7 +288,7 @@ describe("parsers", function() {
             .catch(function(e) {
               assert.equal(e.message, "No parser found for format 'bleh'");
             })
-            .done(function() { done(); });
+            .then(done, done);
         });
       });
     });

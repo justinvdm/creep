@@ -1,6 +1,8 @@
+var path = require('path');
 var _ = require('underscore');
 var q = require('q');
 
+var config = require('./config');
 var utils = require('./utils');
 var parse = require('./parsers');
 var crawl = exports;
@@ -41,6 +43,10 @@ crawl.each.file = function(dirname, options, fn) {
   }
 
   return utils.listFiles(dirname).then(function(filenames) {
+    filenames = _.difference(filenames, config.manifests.map(function(m) {
+      return path.join(dirname, m);
+    }));
+
     var i = -1;
     var n = filenames.length;
     var results = [];
@@ -75,7 +81,7 @@ crawl.each.dir = function(dirname, options, fn) {
 crawl.map = function(dirname, options, fn) {
   var results = [];
 
-  crawl
+  return crawl
     .each(dirname, options, function(filename, metadata) {
       results.push(fn(filename, metadata));
     })
@@ -83,7 +89,7 @@ crawl.map = function(dirname, options, fn) {
 };
 
 crawl.all = function(dirname, options, fn) {
-  crawl.map(dirname, options, function(filename, metadata) {
+  return crawl.map(dirname, options, function(filename, metadata) {
     return {
       filename: filename,
       metadata: metadata
@@ -92,7 +98,7 @@ crawl.all = function(dirname, options, fn) {
 };
 
 crawl.all.metadata = function(dirname, options, fn) {
-  crawl.map(dirname, options, function(filename, metadata) {
+  return crawl.map(dirname, options, function(filename, metadata) {
     return metadata;
   });
 };

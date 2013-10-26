@@ -3,45 +3,6 @@ var path = require('path');
 describe("utils", function() {
   var utils = require(paths.src('./utils'));
 
-  describe(".requireFirst", function() {
-    it("should require the first file it finds", function() {
-      assert.deepEqual(
-        utils.requireFirst([
-          paths.fixtures('code/.creep.yml'),
-          paths.fixtures('code/foo.yml')
-        ]),
-        {type: 'code'});
-
-      assert.deepEqual(
-        utils.requireFirst([
-          paths.fixtures('code/foo.yml'),
-          paths.fixtures('code/.creep.yml')
-        ]),
-        {type: 'code'});
-
-      assert.deepEqual(
-        utils.requireFirst([
-          paths.fixtures('code/foo'),
-          paths.fixtures('code/.creep.yml')
-        ]),
-        {type: 'code'});
-
-      assert.deepEqual(
-        utils.requireFirst([
-          paths.fixtures('code/foo.json'),
-          paths.fixtures('code/js/fib/.creep.json'),
-        ]),
-        {tags: ['fibonnaci']});
-
-      assert.deepEqual(
-        utils.requireFirst([
-          paths.fixtures('code/js/fib/.creep.json'),
-          paths.fixtures('code/foo.json'),
-        ]),
-        {tags: ['fibonnaci']});
-    });
-  });
-
   describe(".filterPaths", function() {
     it("should filter through dir's paths", function(done) {
       utils.filterPaths(paths.fixtures('code'), function(p) {
