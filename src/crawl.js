@@ -30,18 +30,13 @@ crawl.each = function(dirname, options, fn) {
 
     return q
       .all([
-        crawl.each.file(dirname, options, fn),
-        crawl.each.dir(dirname, options, fn)])
+        crawl.each._file(dirname, options, fn),
+        crawl.each._dir(dirname, options, fn)])
       .then();
   });
 };
 
-crawl.each.file = function(dirname, options, fn) {
-  if (arguments.length < 3) {
-    fn = options;
-    options = {};
-  }
-
+crawl.each._file = function(dirname, options, fn) {
   return utils.listFiles(dirname).then(function(filenames) {
     filenames = _.difference(filenames, config.manifests.map(function(m) {
       return path.join(dirname, m);
@@ -59,12 +54,7 @@ crawl.each.file = function(dirname, options, fn) {
   });
 };
 
-crawl.each.dir = function(dirname, options, fn) {
-  if (arguments.length < 3) {
-    fn = options;
-    options = {};
-  }
-
+crawl.each._dir = function(dirname, options, fn) {
   return utils.listDirs(dirname).then(function(dirnames) {
     var i = -1;
     var n = dirnames.length;
