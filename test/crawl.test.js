@@ -19,51 +19,52 @@ describe("crawl", function() {
   });
 
   describe(".each", function() {
-    it("should call a function with the metadata of each child file in the dir",
+    it("should call a function with each child file's metadata",
     function(done) {
       var files = [];
 
-      crawl.each(paths.fixtures('code'), function(filename, metadata) {
-        files.push({
-          filename: filename,
-          metadata: metadata
-        });
-      })
-      .then(function() {
-        assert.deepEqual(
-          files.sort(function(d) { return d.filename; }),
-          [{
-            filename: paths.fixtures('code/py/fib-gen.py'),
-            metadata: {
-              name: 'fibonnaci sequence generator',
-              type: 'code',
-              lang: 'py',
-              tags: [
-                'fibonnaci',
-                'generator']
-            }
-          }, {
-            filename: paths.fixtures('code/js/fib/basic.js'),
-            metadata: {
-              name: 'fibonnaci sequence',
-              type: 'code',
-              lang: 'js',
-              tags: [
-                'fibonnaci']
-            }
-          }, {
-            filename: paths.fixtures('code/js/fib/memoize.js'),
-            metadata: {
-              name: 'fibonnaci sequence using memoization',
-              type: 'code',
-              lang: 'js',
-              tags: [
-                'fibonnaci',
-                'memoize']
-            }
-          }]);
-      })
-      .then(done, done);
+      crawl
+        .each(paths.fixtures('code'), function(filename, metadata) {
+          files.push({
+            filename: filename,
+            metadata: metadata
+          });
+        })
+        .then(function() {
+          assert.deepEqual(
+            files.sort(function(d) { return d.filename; }),
+            [{
+              filename: paths.fixtures('code/py/fib-gen.py'),
+              metadata: {
+                name: 'fibonnaci sequence generator',
+                type: 'code',
+                lang: 'py',
+                tags: [
+                  'fibonnaci',
+                  'generator']
+              }
+            }, {
+              filename: paths.fixtures('code/js/fib/basic.js'),
+              metadata: {
+                name: 'fibonnaci sequence',
+                type: 'code',
+                lang: 'js',
+                tags: [
+                  'fibonnaci']
+              }
+            }, {
+              filename: paths.fixtures('code/js/fib/memoize.js'),
+              metadata: {
+                name: 'fibonnaci sequence using memoization',
+                type: 'code',
+                lang: 'js',
+                tags: [
+                  'fibonnaci',
+                  'memoize']
+              }
+            }]);
+        })
+        .then(done, done);
     });
   });
 });
