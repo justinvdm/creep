@@ -25,7 +25,7 @@ crawl.each = function(dirname, options, fn) {
   }
 
   return parse.dir(dirname, options).then(function(metadata) {
-    options = _(options).clone();
+    options = _(options || {}).clone();
     options.defaults = metadata;
 
     return q
@@ -71,6 +71,11 @@ crawl.each._dir = function(dirname, options, fn) {
 crawl.map = function(dirname, options, fn) {
   var results = [];
 
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
+
   return crawl
     .each(dirname, options, function(filename, metadata) {
       results.push(fn(filename, metadata));
@@ -78,7 +83,7 @@ crawl.map = function(dirname, options, fn) {
     .then(function() { return q.all(results); });
 };
 
-crawl.all = function(dirname, options, fn) {
+crawl.all = function(dirname, options) {
   return crawl.map(dirname, options, function(filename, metadata) {
     return {
       filename: filename,
@@ -87,7 +92,7 @@ crawl.all = function(dirname, options, fn) {
   });
 };
 
-crawl.all.metadata = function(dirname, options, fn) {
+crawl.all.metadata = function(dirname, options) {
   return crawl.map(dirname, options, function(filename, metadata) {
     return metadata;
   });
@@ -95,6 +100,11 @@ crawl.all.metadata = function(dirname, options, fn) {
 
 crawl.filter = function(dirname, options, fn) {
   var results = [];
+
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
@@ -111,6 +121,11 @@ crawl.filter = function(dirname, options, fn) {
 crawl.filter.filenames = function(dirname, options, fn) {
   var results = [];
 
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
+
   return crawl
     .each(dirname, options, function(filename, metadata) {
       if (fn(filename, metadata)) {
@@ -122,6 +137,11 @@ crawl.filter.filenames = function(dirname, options, fn) {
 
 crawl.filter.metadata = function(dirname, options, fn) {
   var results = [];
+
+  if (arguments.length < 3) {
+    fn = options;
+    options = {};
+  }
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
