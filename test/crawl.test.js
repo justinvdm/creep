@@ -30,8 +30,6 @@ describe("crawl", function() {
         });
       })
       .then(function() {
-        console.log(JSON.stringify(files.sort(function(d) { return d.filename; })));
-
         assert.deepEqual(
           files.sort(function(d) { return d.filename; }),
           [{
