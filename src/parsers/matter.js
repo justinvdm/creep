@@ -1,9 +1,11 @@
 var q = require('q');
+var util = require('util');
 var fs = require('q-io/fs');
 var matter = require('matter');
 
 var config = require('../config');
 var parsers = require('./');
+
 
 parsers.register.parser('matter', function(filename, options) {
   options = options || {};
@@ -11,7 +13,7 @@ parsers.register.parser('matter', function(filename, options) {
   var parser = matter.parse[format];
 
   if (!parser) {
-    return q.reject(new Error("No parser found for format '" + format + "'"));
+    return q.reject(new Error(util.format("No parser found for format '%s'", format)));
   }
 
   return fs

@@ -1,8 +1,4 @@
-var q = require('q');
-
-describe("parsers", function() {
-  var parsers = require(paths.src('./parsers'));
-
+describe("creep.parsers", function() {
   function foo() {
     return {
       lerp: 'larp',
@@ -15,154 +11,154 @@ describe("parsers", function() {
 
   describe(".register", function() {
     afterEach(function() {
-      parsers.unregister('foo');
+      creep.parsers.unregister('foo');
     });
 
     it("should register a parser and the extensions it handles", function() {
-      assert(!parsers.get.byName('foo'));
-      assert(!parsers.get.byExt('.foo'));
-      assert(!parsers.get.byExt('.bar'));
+      assert(!creep.parsers.get.byName('foo'));
+      assert(!creep.parsers.get.byExt('.foo'));
+      assert(!creep.parsers.get.byExt('.bar'));
 
-      parsers.register('foo', ['.foo', '.bar'], foo);
+      creep.parsers.register('foo', ['.foo', '.bar'], foo);
 
-      assert.equal(parsers.get.byName('foo'), foo);
-      assert.equal(parsers.get.byExt('.foo'), foo);
-      assert.equal(parsers.get.byExt('.bar'), foo);
+      assert.equal(creep.parsers.get.byName('foo'), foo);
+      assert.equal(creep.parsers.get.byExt('.foo'), foo);
+      assert.equal(creep.parsers.get.byExt('.bar'), foo);
     });
 
     describe(".parser", function() {
       it("should register a parser", function() {
-        assert(!parsers.get.byName('foo'));
-        parsers.register.parser('foo', foo);
-        assert.equal(parsers.get.byName('foo'), foo);
+        assert(!creep.parsers.get.byName('foo'));
+        creep.parsers.register.parser('foo', foo);
+        assert.equal(creep.parsers.get.byName('foo'), foo);
       });
     });
 
     describe(".ext", function() {
       it("should associate an extension to a parser", function() {
-        parsers.register.parser('foo', foo);
+        creep.parsers.register.parser('foo', foo);
 
-        assert(!parsers.get.byExt('.foo'));
-        parsers.register.ext('foo', '.foo');
-        assert.equal(parsers.get.byExt('.foo'), foo);
+        assert(!creep.parsers.get.byExt('.foo'));
+        creep.parsers.register.ext('foo', '.foo');
+        assert.equal(creep.parsers.get.byExt('.foo'), foo);
       });
     });
 
     describe(".exts", function() {
       it("should associate extensions to a parser", function() {
-        parsers.register.parser('foo', foo);
+        creep.parsers.register.parser('foo', foo);
 
-        assert(!parsers.get.byExt('.foo'));
-        assert(!parsers.get.byExt('.bar'));
+        assert(!creep.parsers.get.byExt('.foo'));
+        assert(!creep.parsers.get.byExt('.bar'));
 
-        parsers.register.exts('foo', ['.foo', '.bar']);
+        creep.parsers.register.exts('foo', ['.foo', '.bar']);
 
-        assert.equal(parsers.get.byExt('.foo'), foo);
-        assert.equal(parsers.get.byExt('.bar'), foo);
+        assert.equal(creep.parsers.get.byExt('.foo'), foo);
+        assert.equal(creep.parsers.get.byExt('.bar'), foo);
       });
     });
   });
 
   describe(".unregister", function() {
     beforeEach(function() {
-      parsers.register('foo', ['.foo', '.bar'], foo);
+      creep.parsers.register('foo', ['.foo', '.bar'], foo);
     });
 
     afterEach(function() {
-      parsers.unregister('foo');
+      creep.parsers.unregister('foo');
     });
 
     it("should unregister a parser and the extensions it handles", function() {
-      assert.equal(parsers.get.byName('foo'), foo);
-      assert.equal(parsers.get.byExt('.foo'), foo);
-      assert.equal(parsers.get.byExt('.bar'), foo);
+      assert.equal(creep.parsers.get.byName('foo'), foo);
+      assert.equal(creep.parsers.get.byExt('.foo'), foo);
+      assert.equal(creep.parsers.get.byExt('.bar'), foo);
 
-      parsers.unregister('foo');
+      creep.parsers.unregister('foo');
 
-      assert(!parsers.get.byName('foo'));
-      assert(!parsers.get.byExt('.foo'));
-      assert(!parsers.get.byExt('.bar'));
+      assert(!creep.parsers.get.byName('foo'));
+      assert(!creep.parsers.get.byExt('.foo'));
+      assert(!creep.parsers.get.byExt('.bar'));
     });
 
     describe(".parser", function() {
       it("should unregister a parser and the extensions it handles", function() {
-        assert.equal(parsers.get.byName('foo'), foo);
-        assert.equal(parsers.get.byExt('.foo'), foo);
-        assert.equal(parsers.get.byExt('.bar'), foo);
+        assert.equal(creep.parsers.get.byName('foo'), foo);
+        assert.equal(creep.parsers.get.byExt('.foo'), foo);
+        assert.equal(creep.parsers.get.byExt('.bar'), foo);
 
-        parsers.unregister.parser('foo');
+        creep.parsers.unregister.parser('foo');
 
-        assert(!parsers.get.byName('foo'));
-        assert(!parsers.get.byExt('.foo'));
-        assert(!parsers.get.byExt('.bar'));
+        assert(!creep.parsers.get.byName('foo'));
+        assert(!creep.parsers.get.byExt('.foo'));
+        assert(!creep.parsers.get.byExt('.bar'));
       });
     });
 
     describe(".ext", function() {
       it("should unassociate an extension from a parser", function() {
-        assert.equal(parsers.get.byExt('.foo'), foo);
-        parsers.unregister.ext('.foo');
-        assert(!parsers.get.byExt('.foo'));
+        assert.equal(creep.parsers.get.byExt('.foo'), foo);
+        creep.parsers.unregister.ext('.foo');
+        assert(!creep.parsers.get.byExt('.foo'));
       });
     });
 
     describe(".exts", function() {
       it("should unassociate extensions from a parser", function() {
-        assert.equal(parsers.get.byExt('.foo'), foo);
-        assert.equal(parsers.get.byExt('.bar'), foo);
+        assert.equal(creep.parsers.get.byExt('.foo'), foo);
+        assert.equal(creep.parsers.get.byExt('.bar'), foo);
 
-        parsers.unregister.exts(['.foo', '.bar']);
+        creep.parsers.unregister.exts(['.foo', '.bar']);
 
-        assert(!parsers.get.byExt('.foo'));
-        assert(!parsers.get.byExt('.bar'));
+        assert(!creep.parsers.get.byExt('.foo'));
+        assert(!creep.parsers.get.byExt('.bar'));
       });
     });
   });
 
   describe(".get", function() {
     beforeEach(function() {
-      parsers.register('foo', ['.foo', '.bar'], foo);
+      creep.parsers.register('foo', ['.foo', '.bar'], foo);
     });
 
     afterEach(function() {
-      parsers.unregister('foo');
+      creep.parsers.unregister('foo');
     });
 
     it("should get a parser by name", function() {
-      assert.equal(parsers.get('foo'), foo);
+      assert.equal(creep.parsers.get('foo'), foo);
     });
 
     describe(".byName", function() {
       it("should get a parser by name", function() {
-        assert.equal(parsers.get.byName('foo'), foo);
+        assert.equal(creep.parsers.get.byName('foo'), foo);
       });
     });
 
     describe(".ext", function() {
       it("should get a parser by extension", function() {
-        assert.equal(parsers.get.byExt('.foo'), foo);
-        assert.equal(parsers.get.byExt('.bar'), foo);
+        assert.equal(creep.parsers.get.byExt('.foo'), foo);
+        assert.equal(creep.parsers.get.byExt('.bar'), foo);
       });
     });
 
     describe(".byFilename", function() {
       it("should get a parser from the given filename", function() {
-        assert.equal(parsers.get.byFilename('luke.foo'), foo);
+        assert.equal(creep.parsers.get.byFilename('luke.foo'), foo);
       });
     });
   });
 
   describe(".file", function() {
     beforeEach(function() {
-      parsers.register('foo', ['.foo', '.bar'], foo);
+      creep.parsers.register('foo', ['.foo', '.bar'], foo);
     });
 
     afterEach(function() {
-      parsers.unregister('foo');
+      creep.parsers.unregister('foo');
     });
 
     it("proxy to the parser associated to the given filename", function(done) {
-      parsers.file('luke.foo')
+      creep.parsers.file('luke.foo')
         .then(function(metadata) {
           assert.deepEqual(
             metadata,
@@ -178,7 +174,7 @@ describe("parsers", function() {
     });
 
     it("should deep merge defaults", function(done) {
-      parsers
+      creep.parsers
         .file(paths.fixtures('luke.foo'), {
           defaults: {
             foo: 'bar',
@@ -204,7 +200,7 @@ describe("parsers", function() {
 
     describe("if no parser is found for an extension", function() {
       it("should fall back to a no op parser ", function(done) {
-        parsers.file('luke.spam')
+        creep.parsers.file('luke.spam')
           .then(function(metadata) {
             assert.deepEqual(metadata, {});
           })
@@ -215,14 +211,14 @@ describe("parsers", function() {
 
   describe(".dir", function() {
     it("should parse the dir's metadata from a manifest", function(done) {
-      parsers.dir(paths.fixtures('code/js/fib')).then(function(metadata) {
+      creep.parsers.dir(paths.fixtures('code/js/fib')).then(function(metadata) {
         assert.deepEqual(metadata, {tags: ['fibonnaci']});
       })
       .then(done, done);
     });
 
     it("should deep merge defaults", function(done) {
-      parsers
+      creep.parsers
         .dir(paths.fixtures('code/js/fib'), {
           defaults: {
             foo: 'bar',
@@ -245,30 +241,30 @@ describe("parsers", function() {
     describe(".manifest", function() {
       it("should require the first manifest it finds in the dir", function() {
         assert.deepEqual(
-          parsers.dir.manifest(paths.fixtures('code')),
+          creep.parsers.dir.manifest(paths.fixtures('code')),
           {type: 'code'});
 
         assert.deepEqual(
-          parsers.dir.manifest(paths.fixtures('code/js')),
+          creep.parsers.dir.manifest(paths.fixtures('code/js')),
           {lang: 'js'});
 
         assert.deepEqual(
-          parsers.dir.manifest(paths.fixtures('code/js/fib')),
+          creep.parsers.dir.manifest(paths.fixtures('code/js/fib')),
           {tags: ['fibonnaci']});
 
         assert.deepEqual(
-          parsers.dir.manifest(paths.fixtures('i/do/not/exist')),
+          creep.parsers.dir.manifest(paths.fixtures('i/do/not/exist')),
           {});
       });
     });
   });
 
-  describe("bundled parsers", function() {
+  describe("bundled creep.parsers", function() {
     describe("matter", function() {
       var matter;
       
       beforeEach(function() {
-        matter = parsers.get('matter');
+        matter = creep.parsers.get('matter');
       });
 
       it("should parse and return a file's front matter metadata", function(done) {

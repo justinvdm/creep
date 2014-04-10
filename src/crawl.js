@@ -1,3 +1,5 @@
+var crawl = exports;
+
 var path = require('path');
 var _ = require('lodash');
 var q = require('q');
@@ -5,7 +7,7 @@ var q = require('q');
 var config = require('./config');
 var utils = require('./utils');
 var parse = require('./parsers');
-var crawl = exports;
+
 
 crawl.invoke = function(filename, options, fn) {
   if (arguments.length < 3) {
@@ -17,6 +19,7 @@ crawl.invoke = function(filename, options, fn) {
     .all([filename, parse.file(filename, options)])
     .spread(fn);
 };
+
 
 crawl.each = function(dirname, options, fn) {
   if (arguments.length < 3) {
@@ -36,37 +39,28 @@ crawl.each = function(dirname, options, fn) {
   });
 };
 
+
 crawl.each._file = function(dirname, options, fn) {
   return utils.listFiles(dirname).then(function(filenames) {
     filenames = _.difference(filenames, config.manifests.map(function(m) {
       return path.join(dirname, m);
     }));
 
-    var i = -1;
-    var n = filenames.length;
-    var results = [];
-
-    while (++i < n) {
-      results.push(crawl.invoke(filenames[i], options, fn));
-    }
-
-    return q.all(results);
+    return q.all(filenames.map(function(filename) {
+      return crawl.invoke(filename, options, fn);
+    }));
   });
 };
+
 
 crawl.each._dir = function(dirname, options, fn) {
   return utils.listDirs(dirname).then(function(dirnames) {
-    var i = -1;
-    var n = dirnames.length;
-    var results = [];
-
-    while (++i < n) {
-      results.push(crawl.each(dirnames[i], options, fn));
-    }
-
-    return q.all(results);
+    return q.all(dirnames.map(function(dirname) {
+      return crawl.each(dirname, options, fn);
+    }));
   });
 };
+
 
 crawl.map = function(dirname, options, fn) {
   var results = [];
@@ -80,8 +74,11 @@ crawl.map = function(dirname, options, fn) {
     .each(dirname, options, function(filename, metadata) {
       results.push(fn(filename, metadata));
     })
-    .then(function() { return q.all(results); });
+    .then(function() {
+      return q.all(results);
+    });
 };
+
 
 crawl.all = function(dirname, options) {
   return crawl.map(dirname, options, function(filename, metadata) {
@@ -92,11 +89,13 @@ crawl.all = function(dirname, options) {
   });
 };
 
+
 crawl.all.metadata = function(dirname, options) {
   return crawl.map(dirname, options, function(filename, metadata) {
     return metadata;
   });
 };
+
 
 crawl.filter = function(dirname, options, fn) {
   var results = [];
@@ -115,8 +114,11 @@ crawl.filter = function(dirname, options, fn) {
         });
       }
     })
-    .then(function() { return q.all(results); });
+    .then(function() {
+      return q.all(results);
+    });
 };
+
 
 crawl.filter.filenames = function(dirname, options, fn) {
   var results = [];
@@ -132,8 +134,11 @@ crawl.filter.filenames = function(dirname, options, fn) {
         results.push(filename);
       }
     })
-    .then(function() { return q.all(results); });
+    .then(function() {
+      return q.all(results);
+    });
 };
+
 
 crawl.filter.metadata = function(dirname, options, fn) {
   var results = [];
@@ -149,5 +154,7 @@ crawl.filter.metadata = function(dirname, options, fn) {
         results.push(metadata);
       }
     })
-    .then(function() { return q.all(results); });
+    .then(function() {
+      return q.all(results);
+    });
 };

@@ -1,5 +1,6 @@
 {
   "laxbreak":  true,
   "laxcomma":  true,
-  "expr": true
+  "expr": true,
+  "unused": "vars"
 }

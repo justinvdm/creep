@@ -1,9 +1,7 @@
-describe("crawl", function() {
-  var crawl = require(paths.src('./crawl'));
-
+describe("creep.crawl", function() {
   describe(".invoke", function() {
     it("should call a function with the file's metadata", function(done) {
-      crawl
+      creep.crawl
         .invoke(
           paths.fixtures('code/js/fib/memoize.js'),
           function(filename, metadata) {
@@ -19,11 +17,10 @@ describe("crawl", function() {
   });
 
   describe(".each", function() {
-    it("should call a function with each child file's metadata",
-    function(done) {
+    it("should call a function with each child file's metadata", function(done) {
       var results = [];
 
-      crawl
+      creep.crawl
         .each(paths.fixtures('code'), function(filename, metadata) {
           results.push({
             filename: filename,
@@ -70,7 +67,7 @@ describe("crawl", function() {
 
   describe(".map", function() {
     it("should do a map for each child file's metadata", function(done) {
-      crawl
+      creep.crawl
         .map(paths.fixtures('code'), function(filename, metadata) {
           return metadata.name;
         })
@@ -88,7 +85,7 @@ describe("crawl", function() {
   describe(".all", function() {
     it("should return all the child files' names and metadata",
     function(done) {
-      crawl
+      creep.crawl
         .all(paths.fixtures('code'))
         .then(function(results) {
           assert.deepEqual(
@@ -129,7 +126,7 @@ describe("crawl", function() {
 
     describe(".metadata", function() {
       it("should return all the child files' metadata", function(done) {
-        crawl
+        creep.crawl
           .all
           .metadata(paths.fixtures('code'))
           .then(function(results) {
@@ -164,7 +161,7 @@ describe("crawl", function() {
 
   describe(".filter", function() {
     it("should filter its child files' names and metadata", function(done) {
-      crawl
+      creep.crawl
         .filter(paths.fixtures('code'), function(filename, metadata) {
           return metadata.lang == 'js';
         })
@@ -197,7 +194,7 @@ describe("crawl", function() {
 
     describe(".filenames", function() {
       it("should filter its child files' names", function(done) {
-        crawl
+        creep.crawl
           .filter
           .filenames(paths.fixtures('code'), function(filename, metadata) {
             return metadata.lang == 'js';
@@ -214,7 +211,7 @@ describe("crawl", function() {
 
     describe(".metadata", function() {
       it("should filter its child files' metadata", function(done) {
-        crawl
+        creep.crawl
           .filter
           .metadata(paths.fixtures('code'), function(filename, metadata) {
             return metadata.lang == 'js';
