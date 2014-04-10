@@ -22,11 +22,11 @@
   },
   "dependencies": {
     "matter": "~0.2.0",
-    "underscore": "~1.5.2",
     "js-yaml": "~2.1.0",
     "q": "~0.9.7",
     "q-io": "~1.10.0",
-    "tea-merge": "~0.1.0"
+    "tea-merge": "~0.1.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

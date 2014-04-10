@@ -1,5 +1,5 @@
 var path = require('path');
-var _ = require('underscore');
+var _ = require('lodash');
 var q = require('q');
 
 var config = require('./config');
@@ -25,7 +25,7 @@ crawl.each = function(dirname, options, fn) {
   }
 
   return parse.dir(dirname, options).then(function(metadata) {
-    options = _(options || {}).clone();
+    options = _.cloneDeep(options || {});
     options.defaults = metadata;
 
     return q

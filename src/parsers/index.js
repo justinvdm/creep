@@ -3,7 +3,7 @@ require('js-yaml');
 var nfs = require('fs');
 var path = require('path');
 var q = require('q');
-var _ = require('underscore');
+var _ = require('lodash');
 var deepExtend = require('tea-merge');
 
 var config = require('../config');
