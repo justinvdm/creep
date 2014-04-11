@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-mocha-test": "~0.7.0",
+    "grunt-mocha-test": "~0.10.2",
     "grunt-contrib-jshint": "~0.6.4"
   }
 }

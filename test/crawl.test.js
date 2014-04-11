@@ -1,7 +1,7 @@
 describe("creep.crawl", function() {
   describe(".invoke", function() {
-    it("should call a function with the file's metadata", function(done) {
-      creep.crawl
+    it("should call a function with the file's metadata", function() {
+      return creep.crawl
         .invoke(
           paths.fixtures('code/js/fib/memoize.js'),
           function(filename, metadata) {
@@ -11,16 +11,15 @@ describe("creep.crawl", function() {
               name: 'fibonnaci sequence using memoization',
               tags: ['memoize']
             });
-          })
-        .then(done, done);
+          });
     });
   });
 
   describe(".each", function() {
-    it("should call a function with each child file's metadata", function(done) {
+    it("should call a function with each child file's metadata", function() {
       var results = [];
 
-      creep.crawl
+      return creep.crawl
         .each(paths.fixtures('code'), function(filename, metadata) {
           results.push({
             filename: filename,
@@ -60,14 +59,13 @@ describe("creep.crawl", function() {
                   'memoize']
               }
             }]);
-        })
-        .then(done, done);
+        });
     });
   });
 
   describe(".map", function() {
-    it("should do a map for each child file's metadata", function(done) {
-      creep.crawl
+    it("should do a map for each child file's metadata", function() {
+      return creep.crawl
         .map(paths.fixtures('code'), function(filename, metadata) {
           return metadata.name;
         })
@@ -77,15 +75,13 @@ describe("creep.crawl", function() {
             ['fibonnaci sequence',
              'fibonnaci sequence generator',
              'fibonnaci sequence using memoization']);
-        })
-        .then(done, done);
+        });
     });
   });
 
   describe(".all", function() {
-    it("should return all the child files' names and metadata",
-    function(done) {
-      creep.crawl
+    it("should return all the child files' names and metadata", function() {
+      return creep.crawl
         .all(paths.fixtures('code'))
         .then(function(results) {
           assert.deepEqual(
@@ -120,13 +116,12 @@ describe("creep.crawl", function() {
                   'memoize']
               }
             }]);
-        })
-        .then(done, done);
+        });
     });
 
     describe(".metadata", function() {
-      it("should return all the child files' metadata", function(done) {
-        creep.crawl
+      it("should return all the child files' metadata", function() {
+        return creep.crawl
           .all
           .metadata(paths.fixtures('code'))
           .then(function(results) {
@@ -153,15 +148,14 @@ describe("creep.crawl", function() {
                   'fibonnaci',
                   'memoize']
               }]);
-          })
-          .then(done, done);
+          });
       });
     });
   });
 
   describe(".filter", function() {
-    it("should filter its child files' names and metadata", function(done) {
-      creep.crawl
+    it("should filter its child files' names and metadata", function() {
+      return creep.crawl
         .filter(paths.fixtures('code'), function(filename, metadata) {
           return metadata.lang == 'js';
         })
@@ -188,13 +182,12 @@ describe("creep.crawl", function() {
                   'memoize']
               }
             }]);
-        })
-        .then(done, done);
+        });
     });
 
     describe(".filenames", function() {
-      it("should filter its child files' names", function(done) {
-        creep.crawl
+      it("should filter its child files' names", function() {
+        return creep.crawl
           .filter
           .filenames(paths.fixtures('code'), function(filename, metadata) {
             return metadata.lang == 'js';
@@ -204,14 +197,13 @@ describe("creep.crawl", function() {
               results.sort(),
               [paths.fixtures('code/js/fib/basic.js'),
                paths.fixtures('code/js/fib/memoize.js')]);
-          })
-          .then(done, done);
+          });
       });
     });
 
     describe(".metadata", function() {
-      it("should filter its child files' metadata", function(done) {
-        creep.crawl
+      it("should filter its child files' metadata", function() {
+        return creep.crawl
           .filter
           .metadata(paths.fixtures('code'), function(filename, metadata) {
             return metadata.lang == 'js';
@@ -233,8 +225,7 @@ describe("creep.crawl", function() {
                   'fibonnaci',
                   'memoize']
               }]);
-          })
-          .then(done, done);
+          });
       });
     });
   });

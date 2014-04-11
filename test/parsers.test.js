@@ -157,8 +157,8 @@ describe("creep.parsers", function() {
       creep.parsers.unregister('foo');
     });
 
-    it("proxy to the parser associated to the given filename", function(done) {
-      creep.parsers.file('luke.foo')
+    it("proxy to the parser associated to the given filename", function() {
+      return creep.parsers.file('luke.foo')
         .then(function(metadata) {
           assert.deepEqual(
             metadata,
@@ -169,12 +169,11 @@ describe("creep.parsers", function() {
                 'space',
                 'time']
             });
-        })
-        .then(done, done);
+        });
     });
 
-    it("should deep merge defaults", function(done) {
-      creep.parsers
+    it("should deep merge defaults", function() {
+      return creep.parsers
         .file(paths.fixtures('luke.foo'), {
           defaults: {
             foo: 'bar',
@@ -194,31 +193,29 @@ describe("creep.parsers", function() {
                 'space',
                 'time']
             });
-        })
-        .then(done, done);
+        });
     });
 
     describe("if no parser is found for an extension", function() {
-      it("should fall back to a no op parser ", function(done) {
-        creep.parsers.file('luke.spam')
+      it("should fall back to a no op parser ", function() {
+        return creep.parsers.file('luke.spam')
           .then(function(metadata) {
             assert.deepEqual(metadata, {});
-          })
-          .then(done, done);
+          });
       });
     });
   });
 
   describe(".dir", function() {
-    it("should parse the dir's metadata from a manifest", function(done) {
-      creep.parsers.dir(paths.fixtures('code/js/fib')).then(function(metadata) {
-        assert.deepEqual(metadata, {tags: ['fibonnaci']});
-      })
-      .then(done, done);
+    it("should parse the dir's metadata from a manifest", function() {
+      return creep.parsers.dir(paths.fixtures('code/js/fib'))
+        .then(function(metadata) {
+          assert.deepEqual(metadata, {tags: ['fibonnaci']});
+        });
     });
 
-    it("should deep merge defaults", function(done) {
-      creep.parsers
+    it("should deep merge defaults", function() {
+      return creep.parsers
         .dir(paths.fixtures('code/js/fib'), {
           defaults: {
             foo: 'bar',
@@ -234,8 +231,7 @@ describe("creep.parsers", function() {
                 'stuff',
                 'fibonnaci']
             });
-        })
-        .then(done, done);
+        });
     });
 
     describe(".manifest", function() {
