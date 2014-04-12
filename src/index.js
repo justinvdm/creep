@@ -3,7 +3,9 @@ var creep = exports;
 var _ = require('lodash');
 var config = require('./config');
 
+require('./filters/js');
 require('./parsers/matter');
+
 creep.config = require('./config');
 creep.crawl = require('./crawl');
 creep.filters = require('./filters');
