@@ -4,6 +4,7 @@ var _ = require('lodash');
 var config = require('./config');
 
 require('./filters/js');
+require('./filters/coffee');
 require('./parsers/matter');
 
 creep.config = require('./config');
