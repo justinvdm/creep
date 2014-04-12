@@ -6,6 +6,7 @@ var config = require('./config');
 require('./parsers/matter');
 creep.config = require('./config');
 creep.crawl = require('./crawl');
+creep.filters = require('./filters');
 creep.parsers = require('./parsers');
 creep.utils = require('./utils');
 
