@@ -1,6 +1,10 @@
 module.exports = {
   matterFormat: 'yaml',
 
+  query: {
+    filter: 'coffee'
+  },
+
   parsers: {
     matter: {
       exts: [
