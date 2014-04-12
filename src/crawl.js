@@ -107,12 +107,14 @@ crawl.filter = function(dirname, options, fn) {
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
-      if (fn(filename, metadata)) {
-        results.push({
-          filename: filename,
-          metadata: metadata
-        });
-      }
+      return q(fn(filename, metadata)).then(function(match) {
+        if (match) {
+          results.push({
+            filename: filename,
+            metadata: metadata
+          });
+        }
+      });
     })
     .then(function() {
       return q.all(results);
@@ -130,9 +132,9 @@ crawl.filter.filenames = function(dirname, options, fn) {
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
-      if (fn(filename, metadata)) {
-        results.push(filename);
-      }
+      return q(fn(filename, metadata)).then(function(match) {
+        if (match) { results.push(filename); }
+      });
     })
     .then(function() {
       return q.all(results);
@@ -150,9 +152,9 @@ crawl.filter.metadata = function(dirname, options, fn) {
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
-      if (fn(filename, metadata)) {
-        results.push(metadata);
-      }
+      return q(fn(filename, metadata)).then(function(match) {
+      if (match) { results.push(metadata); }
+      });
     })
     .then(function() {
       return q.all(results);
