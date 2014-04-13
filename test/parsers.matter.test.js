@@ -15,7 +15,7 @@ describe("creep.parsers:matter", function() {
     it("should errback", function() {
       return matter('does/not/matter.js', {matterFormat: 'bleh'})
         .catch(function(e) {
-          assert.equal(e.message, "No parser found for format 'bleh'");
+          assert.equal(e.message, "No matter parser found for format 'bleh'");
         });
     });
   });

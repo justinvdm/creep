@@ -13,7 +13,8 @@ parsers.register.parser('matter', function(filename, options) {
   var parser = matter.parse[format];
 
   if (!parser) {
-    return q.reject(new Error(util.format("No parser found for format '%s'", format)));
+    return q.reject(new Error(util.format(
+      "No matter parser found for format '%s'", format)));
   }
 
   return fs
