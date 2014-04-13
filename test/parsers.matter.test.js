@@ -11,6 +11,13 @@ describe("creep.parsers:matter", function() {
       });
   });
 
+  it("should return an empty object if parse errors are encountered", function() {
+    return matter(paths.fixtures('irrelevant.md'))
+      .then(function(metadata) {
+        assert.deepEqual(metadata, {});
+      });
+  });
+
   describe("if no matter parser is found for the requested format", function() {
     it("should errback", function() {
       return matter('does/not/matter.js', {matterFormat: 'bleh'})

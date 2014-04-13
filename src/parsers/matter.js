@@ -19,5 +19,11 @@ parsers.register.parser('matter', function(filename, options) {
 
   return fs
     .read(filename)
-    .then(parser);
+    .then(function(data) {
+      return q(parser)
+        .fcall(data)
+        .catch(function() {
+          return {};
+        });
+    });
 });
