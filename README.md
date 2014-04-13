@@ -44,7 +44,7 @@ and earthworms
 console.log('and microscopic hummingbirds');
 ```
 
-then just query the front matter properties you want to be searchable:
+then just query the metadata:
 
 ```sh
 $ creep "'microscopic' in tags or 'rainbows' in tags"  
