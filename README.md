@@ -17,7 +17,7 @@ b.js
 
 ## usage
 
-add front matters to the files in you want to be searchable:
+add front matters to the files you want to be searchable:
 
 *a.md*:
 
