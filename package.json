@@ -1,6 +1,6 @@
 {
   "name": "creep",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Crawls metadata in files and directories",
   "main": "./src/index.js",
   "bin": {
