@@ -1,5 +1,3 @@
-var util = require('util');
-
 var cli = require(paths.src('cli'));
 
 
@@ -14,7 +12,7 @@ describe("cli", function() {
     logs = [];
   });
 
-  describe("creep", function() {
+  describe(".run", function() {
     it("should print out the names of files matching the query", function() {
       return cli.run([
         'node',
@@ -28,6 +26,28 @@ describe("cli", function() {
           paths.fixtures('code/js/fib/memoize.js')
         ]);
       });
+    });
+  });
+
+  describe(".configure", function() {
+    var cwd;
+    var config;
+
+    before(function() {
+      cwd = process.cwd();
+      config = creep.config;
+    });
+
+    after(function() {
+      process.chdir(cwd);
+      creep.config = config;
+    });
+
+    it("should override config defaults if a config file is present", function() {
+      process.chdir(paths.fixtures('code/py'));
+      assert.notDeepEqual(creep.config.parsers.matter.exts, ['.py']);
+      cli.configure();
+      assert.deepEqual(creep.config.parsers.matter.exts, ['.py']);
     });
   });
 });

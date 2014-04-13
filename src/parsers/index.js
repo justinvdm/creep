@@ -125,34 +125,25 @@ parsers.file = function(filename, options) {
 parsers.dir = function(dirname, options) {
   dirname = path.resolve(dirname);
   options = options || {};
-  var metadata = parsers.dir.manifest(dirname);
+  var metadata = parsers.dir.meta(dirname);
   return q(deepExtend({}, options.defaults || {}, metadata));
 };
 
 
-parsers.dir.manifest = function(dirname) {
+parsers.dir.meta = function(dirname) {
+  var data = {};
   dirname = path.resolve(dirname);
 
-  var filenames = config.manifests.map(function(m) {
-    return path.join(dirname, m);
+  config.files.meta.some(function(m) {
+    var p = path.join(dirname, m);
+
+    if (nfs.existsSync(p)) {
+      // ensure we don't use the cache
+      delete require.cache[p];
+      data = require(p) || {};
+      return true;
+    }
   });
 
-  var i = -1;
-  var n = filenames.length;
-  var filename;
-  var data;
-
-  while (++i < n) {
-    filename = filenames[i];
-
-    if (nfs.existsSync(filename)) {
-      // ensure we don't use the cache
-      delete require.cache[filename];
-
-      data = require(filename);
-      if (typeof data != 'undefined') { return data; }
-    }
-  }
-
-  return {};
+  return data;
 };

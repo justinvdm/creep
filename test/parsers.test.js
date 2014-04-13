@@ -207,7 +207,7 @@ describe("creep.parsers", function() {
   });
 
   describe(".dir", function() {
-    it("should parse the dir's metadata from a manifest", function() {
+    it("should parse the dir's metadata from a meta", function() {
       return creep.parsers.dir(paths.fixtures('code/js/fib'))
         .then(function(metadata) {
           assert.deepEqual(metadata, {tags: ['fibonnaci']});
@@ -234,22 +234,22 @@ describe("creep.parsers", function() {
         });
     });
 
-    describe(".manifest", function() {
-      it("should require the first manifest it finds in the dir", function() {
+    describe(".meta", function() {
+      it("should require the first meta it finds in the dir", function() {
         assert.deepEqual(
-          creep.parsers.dir.manifest(paths.fixtures('code')),
+          creep.parsers.dir.meta(paths.fixtures('code')),
           {type: 'code'});
 
         assert.deepEqual(
-          creep.parsers.dir.manifest(paths.fixtures('code/js')),
+          creep.parsers.dir.meta(paths.fixtures('code/js')),
           {lang: 'js'});
 
         assert.deepEqual(
-          creep.parsers.dir.manifest(paths.fixtures('code/js/fib')),
+          creep.parsers.dir.meta(paths.fixtures('code/js/fib')),
           {tags: ['fibonnaci']});
 
         assert.deepEqual(
-          creep.parsers.dir.manifest(paths.fixtures('i/do/not/exist')),
+          creep.parsers.dir.meta(paths.fixtures('i/do/not/exist')),
           {});
       });
     });

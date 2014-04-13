@@ -2,7 +2,9 @@
 var cli = exports;
 cli.opts = require('commander');
 
+var _ = require('lodash');
 var q = require('q');
+var fs = require('fs');
 var pkg = require('../package');
 var creep = require('./');
 
@@ -14,6 +16,16 @@ cli.opts
 
 cli.print = function() {
   console.log.apply(null, arguments);
+};
+
+
+cli.configure = function() {
+  creep.config.files.rc.some(function(p) {
+    if (fs.existsSync(p)) {
+      _.extend(creep.config, require(p));
+      return true;
+    }
+  });
 };
 
 
@@ -37,6 +49,8 @@ cli.run = function(args) {
 
 
 if (require.main === module) {
+  cli.configure();
+
   cli.run(process.argv).done(function() {
     process.exit();
   });

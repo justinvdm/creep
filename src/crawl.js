@@ -1,8 +1,8 @@
 var crawl = exports;
 
-var path = require('path');
-var _ = require('lodash');
 var q = require('q');
+var _ = require('lodash');
+var path = require('path');
 var fs = require('q-io/fs');
 
 var config = require('./config');
@@ -49,7 +49,7 @@ crawl.each = function(pathname, options, fn) {
 
 crawl.each._file = function(dirname, options, fn) {
   return utils.listFiles(dirname).then(function(filenames) {
-    filenames = _.difference(filenames, config.manifests.map(function(m) {
+    filenames = _.difference(filenames, config.files.ignore.map(function(m) {
       return path.join(dirname, m);
     }));
 
