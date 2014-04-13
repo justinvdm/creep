@@ -9,6 +9,12 @@ b.js
 ```
 
 
+# installation
+```sh
+$ npm install creep
+```
+
+
 ## usage
 
 add front matters to the files in you want to be searchable:
@@ -56,6 +62,7 @@ creep looks for the first of the following metadata files in the directories it 
   - `creep.yaml`
   - `.creep.json`
   - `creep.json`
+
 
 ## config
 creep's uses the config defaults given in [`creep.config`](src/config.js), then merges these defaults with the first of these configs that it finds:
