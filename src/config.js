@@ -31,10 +31,12 @@ var config = module.exports = {
       'creep.json'
     ],
     rc: [
-      '.creeprc.json',
+      '.creeprc.yml',
       '.creeprc.yaml',
-      path.join(process.env.HOME, '.creeprc.json'),
-      path.join(process.env.HOME, '.creeprc.yaml')
+      '.creeprc.json',
+      path.join(process.env.HOME, '.creeprc.yml'),
+      path.join(process.env.HOME, '.creeprc.yaml'),
+      path.join(process.env.HOME, '.creeprc.json')
     ]
   }
 };

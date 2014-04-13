@@ -67,7 +67,9 @@ creep looks for the first of the following metadata files in the directories it 
 ## config
 creep's uses the config defaults given in [`creep.config`](src/config.js), then merges these defaults with the first of these configs that it finds:
 
+  - `./.creep.yml`
   - `./.creep.yaml`
   - `./.creep.json`
+  - `$HOME/.creep.yml`
   - `$HOME/.creep.yaml`
   - `$HOME/.creep.json`
