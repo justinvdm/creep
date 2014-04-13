@@ -2,7 +2,10 @@
   "name": "creep",
   "version": "0.0.0",
   "description": "Crawls metadata in files and directories",
-  "main": "index.js",
+  "main": "./src/index.js",
+  "bin": {
+    "creep": "./src/cli.js"
+  },
   "scripts": {
     "test": "grunt test"
   },
@@ -27,7 +30,8 @@
     "q-io": "~1.10.0",
     "tea-merge": "~0.1.0",
     "lodash": "~2.4.1",
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "commander": "~2.2.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
