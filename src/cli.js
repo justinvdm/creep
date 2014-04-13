@@ -9,7 +9,8 @@ var pkg = require('../package');
 var creep = require('./');
 
 
-cli.opts
+cli
+  .opts
   .version(pkg.version)
   .usage('<query> [paths]');
 
@@ -19,34 +20,39 @@ cli.print = function() {
 };
 
 
-cli.configure = function() {
+cli.run = function(args) {
   _.extend(creep.config, creep.utils.loadFirst(creep.config.files.rc) || {});
+  (creep.config.plugins || []).forEach(require);
+  cli.opts.parse(args);
 };
 
 
-cli.run = function(args) {
-  cli.opts.parse(args);
+cli.opts.on('*', function() {
   cli.opts.query = cli.opts.args[0];
   cli.opts.paths = cli.opts.args[1]
     ? cli.opts.args.slice(1)
     : ['.'];
 
-  return q.all(cli.opts.paths.map(function(p) {
-    return creep
-      .query.filter.filenames(p, cli.opts.query)
-      .then(function(filenames) {
-        filenames.forEach(function(filename) {
-          cli.print(filename);
+  return q
+    .all(cli.opts.paths.map(function(p) {
+      return creep
+        .query.filter.filenames(p, cli.opts.query)
+        .then(function(filenames) {
+          filenames.forEach(function(filename) {
+            cli.print(filename);
+          });
         });
-      });
-  }));
-};
+    }))
+    .done(function() {
+      cli.opts.emit('done');
+    });
+});
 
 
 if (require.main === module) {
-  cli.configure();
-
-  cli.run(process.argv).done(function() {
+  cli.opts.on('done', function() {
     process.exit();
   });
+
+  cli.run(process.argv);
 }
