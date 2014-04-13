@@ -112,6 +112,7 @@ parsers.get.byFilename = function(filename) {
 
 
 parsers.file = function(filename, options) {
+  filename = path.resolve(filename);
   options = options || {};
   var parser = parsers.get.byFilename(filename) || _.constant({});
 
@@ -122,6 +123,7 @@ parsers.file = function(filename, options) {
 
 
 parsers.dir = function(dirname, options) {
+  dirname = path.resolve(dirname);
   options = options || {};
   var metadata = parsers.dir.manifest(dirname);
   return q(deepExtend({}, options.defaults || {}, metadata));
@@ -129,6 +131,8 @@ parsers.dir = function(dirname, options) {
 
 
 parsers.dir.manifest = function(dirname) {
+  dirname = path.resolve(dirname);
+
   var filenames = config.manifests.map(function(m) {
     return path.join(dirname, m);
   });

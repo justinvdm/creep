@@ -16,17 +16,6 @@ describe("creep.utils", function() {
     });
   });
 
-  describe(".basePaths", function() {
-    it("should resolve a list of paths using the given base", function() {
-      assert.deepEqual(
-        creep.utils.basePaths(
-          paths.fixtures('code/fib'),
-          ['basic.js', 'memoize.js']),
-        [paths.fixtures('code/fib/basic.js'),
-         paths.fixtures('code/fib/memoize.js')]);
-    });
-  });
-
   describe(".listFiles", function() {
     it("should list all files in a dir", function() {
       return creep.utils

@@ -28,8 +28,7 @@ crawl.each = function(pathname, options, fn) {
     options = {};
   }
 
-  pathname = path.resolve(pathname);
-  return fs.isDirectory(pathname).then(function(isDir) {
+  return fs.isDirectory(path.resolve(pathname)).then(function(isDir) {
     var dirname = isDir
       ? pathname
       : path.dirname(pathname);
@@ -115,7 +114,7 @@ crawl.filter = function(dirname, options, fn) {
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
-      return q(fn(filename, metadata)).then(function(match) {
+      return q(fn).fcall(filename, metadata).then(function(match) {
         if (match) {
           results.push({
             filename: filename,
@@ -140,7 +139,7 @@ crawl.filter.filenames = function(dirname, options, fn) {
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
-      return q(fn(filename, metadata)).then(function(match) {
+      return q(fn).fcall(filename, metadata).then(function(match) {
         if (match) { results.push(filename); }
       });
     })
@@ -160,8 +159,8 @@ crawl.filter.metadata = function(dirname, options, fn) {
 
   return crawl
     .each(dirname, options, function(filename, metadata) {
-      return q(fn(filename, metadata)).then(function(match) {
-      if (match) { results.push(metadata); }
+      return q(fn).fcall(filename, metadata).then(function(match) {
+        if (match) { results.push(metadata); }
       });
     })
     .then(function() {

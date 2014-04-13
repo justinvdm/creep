@@ -5,20 +5,13 @@ var fs = require('q-io/fs');
 var q = require('q');
 
 
-utils.basePaths = function(base, children) {
-  return children.map(function(child) {
-    return path.resolve(base, child);
-  });
-};
-
-
 utils.filterPaths = function(dirname, fn) {
-  dirname = path.resolve(dirname);
-
   return fs
     .list(dirname)
     .then(function(pathnames) {
-      pathnames = utils.basePaths(dirname, pathnames);
+      pathnames = pathnames.map(function(p) {
+        return path.join(dirname, p);
+      });
 
       return q
         .all(pathnames.map(fn))
