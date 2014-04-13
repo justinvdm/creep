@@ -16,7 +16,28 @@ describe("creep.crawl", function() {
   });
 
   describe(".each", function() {
-    it("should call a function with each child file's metadata", function() {
+    it("should call a function with a given file's metadata", function() {
+      var results = [];
+
+      return creep.crawl
+        .each(paths.fixtures('code/js/fib/basic.js'), function(filename, metadata) {
+          results.push({
+            filename: filename,
+            metadata: metadata
+          });
+        })
+        .then(function() {
+          assert.deepEqual(results, [{
+            filename: paths.fixtures('code/js/fib/basic.js'),
+            metadata: {
+              name: 'fibonnaci sequence',
+              tags: ['fibonnaci']
+            }
+          }]);
+        });
+    });
+
+    it("should call a function with a given dir's metadata", function() {
       var results = [];
 
       return creep.crawl

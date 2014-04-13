@@ -3,6 +3,7 @@ var crawl = exports;
 var path = require('path');
 var _ = require('lodash');
 var q = require('q');
+var fs = require('q-io/fs');
 
 var config = require('./config');
 var utils = require('./utils');
@@ -21,21 +22,28 @@ crawl.invoke = function(filename, options, fn) {
 };
 
 
-crawl.each = function(dirname, options, fn) {
+crawl.each = function(pathname, options, fn) {
   if (arguments.length < 3) {
     fn = options;
     options = {};
   }
 
-  return parse.dir(dirname, options).then(function(metadata) {
-    options = _.cloneDeep(options || {});
-    options.defaults = metadata;
+  pathname = path.resolve(pathname);
+  return fs.isDirectory(pathname).then(function(isDir) {
+    var dirname = isDir
+      ? pathname
+      : path.dirname(pathname);
 
-    return q
-      .all([
-        crawl.each._file(dirname, options, fn),
-        crawl.each._dir(dirname, options, fn)])
-      .then();
+    return parse.dir(dirname, options).then(function(metadata) {
+      options = _.cloneDeep(options || {});
+      options.defaults = metadata;
+
+      return !isDir
+        ? crawl.invoke(pathname, options, fn)
+        : q.all([
+          crawl.each._file(pathname, options, fn),
+          crawl.each._dir(pathname, options, fn)]);
+    });
   });
 };
 
