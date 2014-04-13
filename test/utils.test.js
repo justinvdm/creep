@@ -1,6 +1,38 @@
 var path = require('path');
 
 describe("creep.utils", function() {
+  describe(".load", function() {
+    it("should load .json files", function() {
+      assert.deepEqual(
+        creep.utils.load(paths.fixtures('code/js/fib/.creep.json')),
+        {tags: ['fibonnaci']});
+    });
+
+    it("should load .yml files", function() {
+      assert.deepEqual(
+        creep.utils.load(paths.fixtures('code/.creep.yml')),
+        {type: 'code'});
+    });
+
+    it("should load .yaml files", function() {
+      assert.deepEqual(
+        creep.utils.load(paths.fixtures('code/py/.creeprc.yaml')),
+        {parsers: {matter: {exts: ['.py']}}});
+    });
+  });
+
+  describe(".loadFirst", function() {
+    it("should load the first file it finds", function() {
+      assert.deepEqual(
+        creep.utils.loadFirst([
+          paths.fixtures('code/foo'),
+          paths.fixtures('code/js/fib/.creep.json'),
+          paths.fixtures('code/js/.creep.yml')
+        ]),
+        {tags: ['fibonnaci']});
+    });
+  });
+
   describe(".filterPaths", function() {
     it("should filter through dir's paths", function() {
       return creep.utils

@@ -1,13 +1,13 @@
 var parsers = exports;
 
 require('js-yaml');
-var nfs = require('fs');
 var util = require('util');
 var path = require('path');
 var q = require('q');
 var _ = require('lodash');
 var deepExtend = require('tea-merge');
 
+var utils = require('../utils');
 var config = require('../config');
 
 
@@ -131,19 +131,9 @@ parsers.dir = function(dirname, options) {
 
 
 parsers.dir.meta = function(dirname) {
-  var data = {};
-  dirname = path.resolve(dirname);
-
-  config.files.meta.some(function(m) {
-    var p = path.join(dirname, m);
-
-    if (nfs.existsSync(p)) {
-      // ensure we don't use the cache
-      delete require.cache[p];
-      data = require(p) || {};
-      return true;
-    }
+  var filenames = config.files.meta.map(function(m) {
+    return path.join(dirname, m);
   });
 
-  return data;
+  return utils.loadFirst(filenames) || {};
 };

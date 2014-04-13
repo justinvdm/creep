@@ -4,7 +4,7 @@ cli.opts = require('commander');
 
 var _ = require('lodash');
 var q = require('q');
-var fs = require('fs');
+
 var pkg = require('../package');
 var creep = require('./');
 
@@ -20,12 +20,7 @@ cli.print = function() {
 
 
 cli.configure = function() {
-  creep.config.files.rc.some(function(p) {
-    if (fs.existsSync(p)) {
-      _.extend(creep.config, require(p));
-      return true;
-    }
-  });
+  _.extend(creep.config, creep.utils.loadFirst(creep.config.files.rc) || {});
 };
 
 

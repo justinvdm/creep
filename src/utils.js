@@ -1,8 +1,38 @@
 var utils = exports;
 
+var yaml = require('js-yaml');
 var path = require('path');
+var nfs = require('fs');
 var fs = require('q-io/fs');
 var q = require('q');
+
+
+utils.load = function(filename) {
+  filename = path.resolve(filename);
+
+  var parse = {
+    '.json': JSON.parse,
+    '.yml': yaml.safeLoad,
+    '.yaml': yaml.safeLoad
+  }[path.extname(filename)];
+
+  var data = nfs.readFileSync(filename, 'utf8');
+  return parse(data);
+};
+
+
+utils.loadFirst = function(filenames) {
+  var data;
+
+  filenames.some(function(filename) {
+    if (nfs.existsSync(path.resolve(filename))) {
+      data = utils.load(filename);
+      return true;
+    }
+  });
+
+  return data;
+};
 
 
 utils.filterPaths = function(dirname, fn) {
