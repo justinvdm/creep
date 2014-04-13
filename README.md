@@ -11,7 +11,7 @@ b.js
 
 # installation
 ```sh
-$ npm install creep
+# npm install -g creep
 ```
 
 
