@@ -19,8 +19,8 @@ filters.register('js', function(query) {
       .catch(function(e) {
         // ignore type and reference errors so we can do queries like:
         // `creep "foo.bar.baz == 'qux'"`
-        if (e instanceof TypeError) { return; }
-        if (e instanceof ReferenceError) { return; }
+        if (e.name == 'TypeError') { return false; }
+        if (e.name == 'ReferenceError') { return false; }
         throw e;
       });
   };
