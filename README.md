@@ -9,7 +9,7 @@ b.js
 ```
 
 
-# installation
+## installation
 ```sh
 # npm install -g creep
 ```
