@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var q = require('q');
 var util = require('util');
 var fs = require('q-io/fs');
@@ -20,10 +21,13 @@ parsers.register.parser('matter', function(filename, options) {
   return fs
     .read(filename)
     .then(function(data) {
-      return q(parser)
-        .fcall(data)
-        .catch(function() {
-          return {};
-        });
+      var result;
+
+      try { result = parser(data); }
+      catch(e) {}
+
+      return _.isObject(result)
+        ? result
+        : {};
     });
 });
